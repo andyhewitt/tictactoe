@@ -17,6 +17,10 @@ def initial_state():
             [EMPTY, EMPTY, EMPTY],
             [EMPTY, EMPTY, EMPTY]]
 
+    # return [[O, O, O],
+    #         [O, X,O],
+    #         [X, O, X]]
+
 
 def player(board):
     """
@@ -82,21 +86,29 @@ def winner(board):
         return board[0][0]
     if board[0][2] == board[1][1] == board[2][0] and board[0][2] is not None:
         return board[0][2]
-    
+
     return None
 
 def terminal(board):
     """
     Returns True if game is over, False otherwise.
     """
-    raise NotImplementedError
+    not_full_cell = True
+    for rows in board:
+        not_full_cell = not_full_cell and all(stone is not None for stone in rows)
+    return not_full_cell
 
 
 def utility(board):
     """
     Returns 1 if X has won the game, -1 if O has won, 0 otherwise.
     """
-    raise NotImplementedError
+    win_value = 0
+    if winner(board) == X:
+        win_value = 1
+    if winner(board) == O:
+        win_value = -1
+    return win_value
 
 
 def minimax(board):
@@ -106,5 +118,5 @@ def minimax(board):
     raise NotImplementedError
 
 print(
-    winner(initial_state())
+    utility(initial_state())
 )
