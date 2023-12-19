@@ -50,7 +50,7 @@ def actions(board):
     for i, row in enumerate(board):
         for j, cell in enumerate(row):
             if cell is None:
-                move.add((i,j))
+                move.add((i, j))
 
     return move
 
@@ -89,13 +89,15 @@ def winner(board):
 
     return None
 
+
 def terminal(board):
     """
     Returns True if game is over, False otherwise.
     """
     not_full_cell = True
     for rows in board:
-        not_full_cell = not_full_cell and all(stone is not None for stone in rows)
+        not_full_cell = not_full_cell and all(
+            stone is not None for stone in rows)
     return not_full_cell
 
 
@@ -116,6 +118,7 @@ def minimax(board):
     Returns the optimal action for the current player on the board.
     """
     raise NotImplementedError
+
 
 print(
     utility(initial_state())
