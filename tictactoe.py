@@ -55,7 +55,12 @@ def result(board, action):
     """
     Returns the board that results from making move (i, j) on the board.
     """
-    raise NotImplementedError
+    if action not in actions(board):
+        raise ValueError("Not a valid move")
+    
+    move_type = player(board)
+    board[action[0]][action[1]] = move_type
+    return board
 
 
 def winner(board):
@@ -85,4 +90,4 @@ def minimax(board):
     """
     raise NotImplementedError
 
-print(actions(initial_state()))
+print(result(initial_state(),(0,0)))
