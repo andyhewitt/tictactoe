@@ -13,8 +13,8 @@ def initial_state():
     """
     Returns starting state of the board.
     """
-    return [[X, EMPTY, EMPTY],
-            [EMPTY, O, EMPTY],
+    return [[EMPTY, EMPTY, EMPTY],
+            [EMPTY, EMPTY, EMPTY],
             [EMPTY, EMPTY, EMPTY]]
 
 
@@ -35,7 +35,7 @@ def player(board):
                 x_num += 1
             elif stone == O:
                 o_num += 1
-    return X if (o_num == x_num) and (init == True) else O
+    return X if (o_num == x_num) and (init is True) else O
 
 
 def actions(board):
@@ -45,7 +45,7 @@ def actions(board):
     move = set()
     for i, row in enumerate(board):
         for j, cell in enumerate(row):
-            if cell == None:
+            if cell is None:
                 move.add((i,j))
 
     return move
@@ -57,7 +57,7 @@ def result(board, action):
     """
     if action not in actions(board):
         raise ValueError("Not a valid move")
-    
+
     move_type = player(board)
     board[action[0]][action[1]] = move_type
     return board
@@ -67,8 +67,23 @@ def winner(board):
     """
     Returns the winner of the game, if there is one.
     """
-    raise NotImplementedError
 
+    # Check the rows
+    for row in board:
+        if row[0] == row[1] == row[1] and row is not None:
+            return row[0]
+    # Check the columns
+    for col in range(3):
+        if board[0][col] == board[1][col] == board[2][col] and board[0][col] is not None:
+            return board[0][col]
+
+    # Check the diagonals
+    if board[0][0] == board[1][1] == board[2][2] and board[0][0] is not None:
+        return board[0][0]
+    if board[0][2] == board[1][1] == board[2][0] and board[0][2] is not None:
+        return board[0][2]
+    
+    return None
 
 def terminal(board):
     """
@@ -90,4 +105,6 @@ def minimax(board):
     """
     raise NotImplementedError
 
-print(result(initial_state(),(0,0)))
+print(
+    winner(initial_state())
+)
