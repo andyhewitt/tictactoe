@@ -14,7 +14,7 @@ def initial_state():
     Returns starting state of the board.
     """
     return [[X, EMPTY, EMPTY],
-            [EMPTY, EMPTY, EMPTY],
+            [EMPTY, O, EMPTY],
             [EMPTY, EMPTY, EMPTY]]
 
 
@@ -42,7 +42,13 @@ def actions(board):
     """
     Returns set of all possible actions (i, j) available on the board.
     """
-    raise NotImplementedError
+    move = set()
+    for i, row in enumerate(board):
+        for j, cell in enumerate(row):
+            if cell == None:
+                move.add((i,j))
+
+    return move
 
 
 def result(board, action):
@@ -79,4 +85,4 @@ def minimax(board):
     """
     raise NotImplementedError
 
-print(player(initial_state()))
+print(actions(initial_state()))
