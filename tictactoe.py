@@ -14,6 +14,9 @@ def initial_state():
     """
     Returns starting state of the board.
     """
+    # return [[EMPTY, O, EMPTY],
+    #         [X, X, EMPTY],
+    #         [EMPTY, EMPTY, O]]
     return [[EMPTY, EMPTY, EMPTY],
             [EMPTY, EMPTY, EMPTY],
             [EMPTY, EMPTY, EMPTY]]
@@ -72,7 +75,7 @@ def winner(board):
 
     # Check the rows
     for row in board:
-        if row[0] == row[1] == row[1] and row is not None:
+        if row[0] == row[1] == row[2] and row is not None:
             return row[0]
     # Check the columns
     for col in range(3):
@@ -146,5 +149,8 @@ def minimax(board):
 
     current_player = player(board)
     if current_player == O:
-        return maxvalue(board)[1]
-    return minvalue(board)[1]
+        return minvalue(board)[1]
+    return maxvalue(board)[1]
+
+
+# print(winner(initial_state()))
