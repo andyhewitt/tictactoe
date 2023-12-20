@@ -14,13 +14,9 @@ def initial_state():
     """
     Returns starting state of the board.
     """
-    # return [[EMPTY, EMPTY, EMPTY],
-    #         [EMPTY, EMPTY, EMPTY],
-    #         [EMPTY, EMPTY, EMPTY]]
-
     return [[EMPTY, EMPTY, EMPTY],
-            [EMPTY, X, EMPTY],
-            [EMPTY, O, X]]
+            [EMPTY, EMPTY, EMPTY],
+            [EMPTY, EMPTY, EMPTY]]
 
 
 def player(board):
@@ -96,11 +92,13 @@ def terminal(board):
     """
     Returns True if game is over, False otherwise.
     """
+    play_result = winner(board) == O or winner(board) == X
+
     not_full_cell = True
     for rows in board:
         not_full_cell = not_full_cell and all(
             stone is not None for stone in rows)
-    return not_full_cell
+    return play_result or not_full_cell
 
 
 def utility(board):
@@ -130,6 +128,7 @@ def minimax(board):
             v = max(v, minvalue(result(board, action))[0])
             if v > v_ref:
                 best_action = action
+                v_ref = v
         return [v, best_action]
 
     def minvalue(board):
@@ -142,9 +141,10 @@ def minimax(board):
             v = min(v, maxvalue(result(board, action))[0])
             if v < v_ref:
                 best_action = action
+                v_ref = v
         return [v, best_action]
 
     current_player = player(board)
     if current_player == O:
-        return minvalue(board)[1]
-    return maxvalue(board)[1]
+        return maxvalue(board)[1]
+    return minvalue(board)[1]
