@@ -122,7 +122,7 @@ def minimax(board):
 
     def maxvalue(board):
         if terminal(board):
-            return utility(board)
+            return [utility(board), None]
         best_action = None
         v = -math.inf
         v_ref = v
@@ -134,7 +134,7 @@ def minimax(board):
 
     def minvalue(board):
         if terminal(board):
-            return utility(board)
+            return [utility(board), None]
         best_action = None
         v = math.inf
         v_ref = v
@@ -148,6 +148,3 @@ def minimax(board):
     if current_player == O:
         return minvalue(board)[1]
     return maxvalue(board)[1]
-
-
-print(player(initial_state()))
