@@ -3,6 +3,7 @@ Tic Tac Toe Player
 """
 
 import math
+import copy
 
 X = "X"
 O = "O"
@@ -13,13 +14,13 @@ def initial_state():
     """
     Returns starting state of the board.
     """
-    return [[EMPTY, EMPTY, EMPTY],
-            [EMPTY, EMPTY, EMPTY],
-            [EMPTY, EMPTY, EMPTY]]
+    # return [[EMPTY, EMPTY, EMPTY],
+    #         [EMPTY, EMPTY, EMPTY],
+    #         [EMPTY, EMPTY, EMPTY]]
 
-    # return [[O, O, O],
-    #         [O, X,O],
-    #         [X, O, X]]
+    return [[EMPTY, EMPTY, EMPTY],
+            [EMPTY, X, EMPTY],
+            [EMPTY, O, X]]
 
 
 def player(board):
@@ -31,15 +32,15 @@ def player(board):
     for rows in board:
         init = init and all(stone is None for stone in rows)
 
+    x_num = 0
+    o_num = 0
     for rows in board:
-        x_num = 0
-        o_num = 0
         for stone in rows:
             if stone == X:
-                x_num += 1
+                x_num = x_num + 1
             elif stone == O:
-                o_num += 1
-    return X if (o_num == x_num) and (init is True) else O
+                o_num = o_num + 1
+    return X if ((o_num == x_num) or (init is True)) else O
 
 
 def actions(board):
@@ -62,9 +63,10 @@ def result(board, action):
     if action not in actions(board):
         raise ValueError("Not a valid move")
 
-    move_type = player(board)
-    board[action[0]][action[1]] = move_type
-    return board
+    result_move = copy.deepcopy(board)
+    move_type = player(result_move)
+    result_move[action[0]][action[1]] = move_type
+    return result_move
 
 
 def winner(board):
@@ -117,9 +119,35 @@ def minimax(board):
     """
     Returns the optimal action for the current player on the board.
     """
-    raise NotImplementedError
+
+    def maxvalue(board):
+        if terminal(board):
+            return utility(board)
+        best_action = None
+        v = -math.inf
+        v_ref = v
+        for action in actions(board):
+            v = max(v, minvalue(result(board, action))[0])
+            if v > v_ref:
+                best_action = action
+        return [v, best_action]
+
+    def minvalue(board):
+        if terminal(board):
+            return utility(board)
+        best_action = None
+        v = math.inf
+        v_ref = v
+        for action in actions(board):
+            v = min(v, maxvalue(result(board, action))[0])
+            if v < v_ref:
+                best_action = action
+        return [v, best_action]
+
+    current_player = player(board)
+    if current_player == O:
+        return minvalue(board)[1]
+    return maxvalue(board)[1]
 
 
-print(
-    utility(initial_state())
-)
+print(player(initial_state()))
